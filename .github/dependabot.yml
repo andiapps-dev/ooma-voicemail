@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # Go modules (goquery, apprise-go, ...)
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Base images in Dockerfile (golang:1.25-alpine, alpine:3.20)
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Actions used by ci.yml / docker-publish.yml
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
