@@ -7,6 +7,17 @@ like `v0.1.0`, and each one gets its own section below.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-14
+
+### Changed
+
+- Docker build now uses Go 1.27 and Alpine 3.24 (previously 1.25/3.20),
+  and `goquery` (the HTML parser the Ooma scraping logic depends on) is
+  updated from 1.11.0 to 1.13.0.
+- CI now actually builds the Dockerfile on every push/PR, not just
+  `go vet`/`build`/`test` — a base-image bump previously could pass CI
+  without the image itself ever being built.
+
 ## [0.1.0] - 2026-09-14
 
 ### Added
