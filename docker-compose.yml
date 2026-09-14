@@ -1,0 +1,9 @@
+services:
+  ooma-voicemail:
+    build: .
+    # or, once published: image: ghcr.io/andiapps-dev/ooma-voicemail:latest
+    container_name: ooma-voicemail
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/data

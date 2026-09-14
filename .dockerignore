@@ -1,0 +1,7 @@
+.git
+.github
+data/
+voicemails/
+voicemails.json
+.env
+*.md
