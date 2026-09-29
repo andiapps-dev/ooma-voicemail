@@ -7,6 +7,21 @@ like `v0.1.0`, and each one gets its own section below.
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-09-28
+
+### Fixed
+
+- `APPRISE_URLS` was split on comma to support multiple Apprise URLs,
+  but a single `mailto://`/`mailtos://` URL's own `to=` parameter
+  legitimately separates multiple recipients with a comma too
+  (`?to=a@x.com,b@x.com`). The split broke that URL apart mid-string
+  into a valid fragment and a schemeless one, which apprise-go's
+  `Add()` correctly rejected with `invalid apprise url: missing
+  scheme` — silently dropping every single notification, for anyone
+  configured with more than one recipient. `APPRISE_URLS` is now
+  newline-separated (one URL per line) instead, which can't collide
+  with a URL's own query string.
+
 ## [0.1.1] - 2026-09-14
 
 ### Changed

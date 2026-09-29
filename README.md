@@ -96,7 +96,7 @@ copyable template) plus two optional command-line flags.
 | `OOMA_URL` | yes | Your Ooma login page, e.g. `https://my.ooma.com/login`. The host portion is reused for every other request the checker makes. |
 | `OOMA_USER` | yes | Ooma account username/email. |
 | `OOMA_PASS` | yes | Ooma account password. |
-| `APPRISE_URLS` | no | One or more comma-separated [Apprise URLs](https://github.com/caronc/apprise/wiki), e.g. `mailto://user:pass@smtp.example.com,discord://webhook_id/webhook_token`. If unset, voicemails are still downloaded, just not announced anywhere. |
+| `APPRISE_URLS` | no | One or more [Apprise URLs](https://github.com/caronc/apprise/wiki), one per line, e.g. `mailto://user:pass@smtp.example.com`. Newline-separated rather than comma-separated, since a mailto:// URL's own `to=` parameter can itself contain commas for multiple recipients. If unset, voicemails are still downloaded, just not announced anywhere. |
 | `CHECK_INTERVAL` | no | How often to poll, as a Go duration (`5m`, `15m`, `1h`, ...). Defaults to `15m`. |
 
 | Flag | Default | Description |

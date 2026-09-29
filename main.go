@@ -36,11 +36,15 @@ type Config struct {
 	OomaUser string
 	OomaPass string
 
-	// One or more Apprise URLs (https://github.com/caronc/apprise/wiki) —
-	// e.g. mailto://user:pass@smtp.example.com, discord://webhook_id/webhook_token.
-	// Sent via github.com/unraid/apprise-go in-process; no separate service
-	// to run. Leave empty to disable notifications (voicemails are still
-	// downloaded either way).
+	// One or more Apprise URLs (https://github.com/caronc/apprise/wiki),
+	// one per line — e.g. mailto://user:pass@smtp.example.com or
+	// discord://webhook_id/webhook_token. Newline-separated rather than
+	// comma-separated: a single mailto:// URL's own to= query parameter
+	// legitimately contains commas for multiple recipients
+	// (to=a@x.com,b@x.com), which a comma-based split would break apart
+	// mid-URL. Sent via github.com/unraid/apprise-go in-process; no
+	// separate service to run. Leave empty to disable notifications
+	// (voicemails are still downloaded either way).
 	AppriseURLs []string
 
 	CheckInterval time.Duration
@@ -51,7 +55,7 @@ func loadConfig() (*Config, error) {
 		OomaURL:     os.Getenv("OOMA_URL"),
 		OomaUser:    os.Getenv("OOMA_USER"),
 		OomaPass:    os.Getenv("OOMA_PASS"),
-		AppriseURLs: splitAndTrim(os.Getenv("APPRISE_URLS"), ","),
+		AppriseURLs: splitAndTrim(os.Getenv("APPRISE_URLS"), "\n"),
 	}
 	if cfg.OomaURL == "" || cfg.OomaUser == "" || cfg.OomaPass == "" {
 		return nil, fmt.Errorf("missing OOMA credentials; set OOMA_URL, OOMA_USER, OOMA_PASS")
@@ -74,7 +78,7 @@ func loadConfig() (*Config, error) {
 }
 
 // splitAndTrim splits s on sep, trims whitespace from each piece, and drops
-// empty results — e.g. for parsing a comma-separated env var.
+// empty results — e.g. for parsing a newline-separated env var.
 func splitAndTrim(s, sep string) []string {
 	var out []string
 	for _, p := range strings.Split(s, sep) {

@@ -135,3 +135,39 @@ func TestOomaBaseURL(t *testing.T) {
 		}
 	}
 }
+
+// Regression test: APPRISE_URLS used to be split on comma, which silently
+// broke a single mailto:// URL whose own `to=` query parameter separates
+// multiple recipients with a comma (e.g. ?to=a@x.com,b@x.com) — the comma
+// split it mid-URL into a valid piece and a schemeless fragment, and
+// apprise-go's Add() rejected the fragment with "missing scheme", so the
+// notification for that voicemail was silently never sent at all. Newlines
+// don't occur inside a URL, so splitting on those instead can't collide with
+// this again.
+func TestSplitAndTrim_DoesNotBreakMultiRecipientMailtoURL(t *testing.T) {
+	in := "mailtos://user:pass@smtp.example.com:587/?to=a@x.com,b@x.com&from=c@x.com"
+	got := splitAndTrim(in, "\n")
+	if len(got) != 1 {
+		t.Fatalf("splitAndTrim(%q, \"\\n\") = %v, want exactly 1 URL", in, got)
+	}
+	if got[0] != in {
+		t.Errorf("splitAndTrim(%q, \"\\n\") = %q, want the URL unchanged", in, got[0])
+	}
+}
+
+func TestSplitAndTrim_MultipleURLsOnePerLine(t *testing.T) {
+	in := "mailtos://user:pass@smtp.example.com:587/?to=a@x.com\ndiscord://webhook_id/webhook_token"
+	got := splitAndTrim(in, "\n")
+	want := []string{
+		"mailtos://user:pass@smtp.example.com:587/?to=a@x.com",
+		"discord://webhook_id/webhook_token",
+	}
+	if len(got) != len(want) {
+		t.Fatalf("splitAndTrim(...) = %v, want %v", got, want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Errorf("splitAndTrim(...)[%d] = %q, want %q", i, got[i], want[i])
+		}
+	}
+}
