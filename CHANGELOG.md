@@ -7,7 +7,7 @@ like `v0.1.0`, and each one gets its own section below.
 
 ## [Unreleased]
 
-## [0.1.2] - 2026-09-28
+## [0.1.3] - 2026-09-28
 
 ### Fixed
 
@@ -21,6 +21,12 @@ like `v0.1.0`, and each one gets its own section below.
   configured with more than one recipient. `APPRISE_URLS` is now
   newline-separated (one URL per line) instead, which can't collide
   with a URL's own query string.
+- CI's pinned Go version had drifted behind `go.mod`'s (a prior,
+  unrelated Go-version bump touched `go.mod` but not the workflow
+  files), so the fix above briefly shipped as a tagged `v0.1.2` whose
+  release build failed before publishing an image — that tag exists on
+  GitHub but was never a real release. Brought CI in line with
+  `go.mod` and re-cut as `v0.1.3` instead of reusing/moving the tag.
 
 ## [0.1.1] - 2026-09-14
 

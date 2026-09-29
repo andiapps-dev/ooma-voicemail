@@ -65,7 +65,7 @@ quickly; the parsing logic is isolated in a handful of small functions in
 
 - An Ooma account with a voicemail inbox at `my.ooma.com` (or your
   region's equivalent — see `OOMA_URL` below)
-- Go 1.25+ if building from source (only relevant outside Docker)
+- Go 1.27.1+ if building from source (only relevant outside Docker)
 
 ## Quick start
 
